@@ -1,0 +1,206 @@
+# ============================================================
+# TASK LINKED LIST
+# ADD - DISPLAY - FIND - TOTAL DURATION - REMOVE
+# ============================================================
+
+
+class TaskNode:
+    def __init__(self, task_name, duration, priority):
+        # Gegevens van één task
+        self.task_name = task_name
+        self.duration = duration
+        self.priority = priority
+
+        # Verwijzing naar volgende node
+        self.next = None
+
+    def __str__(self):
+        # Bepaalt hoe een task geprint wordt
+        return (
+            f"{self.task_name} - "
+            f"{self.duration} min - "
+            f"priority {self.priority}"
+        )
+
+
+class TaskList:
+    def __init__(self):
+        # Eerste node van de linked list
+        # Lege lijst -> head = None
+        self.head = None
+
+
+    # ========================================================
+    # ADD TASK
+    # Voeg task achteraan toe
+    # ========================================================
+
+    def add_task(self, task_name, duration, priority):
+        new_task = TaskNode(task_name, duration, priority)
+
+        # CASE 1:
+        # lijst is leeg
+        if self.head is None:
+            self.head = new_task
+            return
+
+        # CASE 2:
+        # lijst bevat al tasks
+        current = self.head
+
+        # Zoek laatste node
+        while current.next is not None:
+            current = current.next
+
+        # Voeg nieuwe task achteraan toe
+        current.next = new_task
+
+
+    # ========================================================
+    # DISPLAY TASKS
+    # Toon alle tasks
+    # ========================================================
+
+    def display_tasks(self):
+
+        # Lege lijst
+        if self.head is None:
+            print("Empty")
+            return
+
+        current = self.head
+
+        # Doorloop volledige lijst
+        while current is not None:
+            print(current)
+            current = current.next
+
+
+    # ========================================================
+    # FIND TASK
+    # Zoek task op basis van task_name
+    # ========================================================
+
+    def find_task(self, task_name):
+        current = self.head
+
+        while current is not None:
+
+            if current.task_name == task_name:
+                # Geef volledige TaskNode terug
+                return current
+
+            current = current.next
+
+        # Niets gevonden
+        return None
+
+
+    # ========================================================
+    # CALCULATE TOTAL DURATION
+    # Tel duration van alle tasks op
+    # ========================================================
+
+    def calculate_total_duration(self):
+        current = self.head
+        total = 0
+
+        while current is not None:
+
+            total += current.duration
+
+            current = current.next
+
+        return total
+
+
+    # ========================================================
+    # REMOVE TASK
+    # Verwijder task op basis van task_name
+    # ========================================================
+
+    def remove_task(self, task_name):
+        current = self.head
+        previous = None
+
+        while current is not None:
+
+            # Gezochte task gevonden
+            if current.task_name == task_name:
+
+                # CASE 1:
+                # current is de head
+                if previous is None:
+                    self.head = current.next
+
+                # CASE 2:
+                # current staat na de head
+                else:
+                    previous.next = current.next
+
+                return True
+
+            # Ga één node verder
+            previous = current
+            current = current.next
+
+        # Task niet gevonden
+        return None
+
+
+# ============================================================
+# TEST
+# ============================================================
+
+my_list = TaskList()
+
+my_list.add_task("Assembly", 30, 2)
+my_list.add_task("Painting", 20, 3)
+
+
+# Structuur:
+#
+# head
+#  |
+#  v
+# Assembly -> Painting -> None
+
+
+my_list.display_tasks()
+
+# Output:
+# Assembly - 30 min - priority 2
+# Painting - 20 min - priority 3
+
+
+# ============================================================
+# FIND
+# ============================================================
+
+print(my_list.find_task("Assembly"))
+# Assembly - 30 min - priority 2
+
+print(my_list.find_task("Cleaning"))
+# None
+
+
+# ============================================================
+# TOTAL DURATION
+# ============================================================
+
+print(my_list.calculate_total_duration())
+
+# 30 + 20 = 50
+
+
+# ============================================================
+# REMOVE
+# ============================================================
+
+print(my_list.remove_task("Painting"))
+# True
+
+my_list.display_tasks()
+
+# Output:
+# Assembly - 30 min - priority 2
