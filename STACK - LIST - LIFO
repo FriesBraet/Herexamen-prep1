@@ -1,0 +1,84 @@
+# STACK USING A PYTHON LIST - LIFO
+# LIFO = Last In, First Out
+# Het laatste element dat we toevoegen, wordt als eerste verwijderd.
+# In Python kunnen we hiervoor een gewone list gebruiken.
+# append() = toevoegen aan het einde van de stack
+# pop() = laatste element verwijderen en teruggeven
+
+
+class Warehouse:
+    def __init__(self):
+        # Elke Warehouse start met een lege lijst van dozen.
+        # Deze lijst gebruiken we als stack.
+        self.boxes = []
+
+    def add_box(self, name):
+        # append() voegt de nieuwe doos achteraan toe.
+        # Omdat we een stack gebruiken, ligt deze doos nu "bovenaan".
+        self.boxes.append(name)
+
+    def remove_box(self):
+        # Een lege list wordt door Python gezien als False.
+        # Dus:
+        # if self.boxes:
+        # betekent: "als er minstens één doos aanwezig is".
+        if self.boxes:
+
+            # pop() zonder index verwijdert het LAATSTE element.
+            # Dat is precies het LIFO-principe.
+            remove = self.boxes.pop()
+
+            # We geven de verwijderde doos terug.
+            return remove
+
+        # Als de stack leeg is, kunnen we niets verwijderen.
+        return None
+
+    def contains_box(self, name):
+        # Doorloop elke doos in de stack.
+        for box in self.boxes:
+
+            # Controleer of de huidige doos dezelfde naam heeft.
+            if box == name:
+
+                # Zodra we de doos vinden, kunnen we onmiddellijk stoppen.
+                return True
+
+        # Deze return staat BUITEN de for-loop.
+        # We geven pas False terug wanneer ALLE dozen gecontroleerd zijn
+        # en geen enkele overeenkwam.
+        return False
+
+
+# --------------------------------------------------
+# TESTCODE
+# --------------------------------------------------
+
+warehouse = Warehouse()
+
+# Voeg twee dozen toe.
+warehouse.add_box("Box1")
+warehouse.add_box("Box2")
+
+# Stack ziet er nu zo uit:
+# ["Box1", "Box2"]
+# Box2 werd als laatste toegevoegd en ligt dus bovenaan.
+
+print(warehouse.contains_box("Box1"))
+# True
+
+print(warehouse.contains_box("Box2"))
+# True
+
+print(warehouse.contains_box("Box3"))
+# False
+
+print(warehouse.remove_box())
+# Box2
+# Box2 wordt verwijderd omdat die als laatste werd toegevoegd.
+
+# Stack is nu:
+# ["Box1"]
+
+print(warehouse.contains_box("Box2"))
+# False
