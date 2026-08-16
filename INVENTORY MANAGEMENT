@@ -1,0 +1,349 @@
+import random
+
+
+# ============================================================
+# INVENTORY MANAGEMENT
+# BATCHES - PRODUCTS - DEMAND - HOLDING COST - STOCKOUT COST
+# ============================================================
+
+
+# ============================================================
+# 1. BATCH
+# Eén levering/voorraadbatch van een product
+# ============================================================
+
+class Batch:
+    def __init__(self, quantity, cost_per_unit):
+        self.quantity = quantity
+        self.cost_per_unit = cost_per_unit
+
+    def __str__(self):
+        return (
+            f"Batch(quantity={self.quantity}, "
+            f"cost_per_unit={self.cost_per_unit})"
+        )
+
+
+# ============================================================
+# 2. PRODUCT
+# Een product bevat meerdere batches
+# ============================================================
+
+class Product:
+    def __init__(self, product_name, holding_cost, stockout_penalty):
+        self.product_name = product_name
+        self.holding_cost = holding_cost
+        self.stockout_penalty = stockout_penalty
+
+        # Lijst met Batch-objecten
+        self.batches = []
+
+
+    # ========================================================
+    # ADD BATCH
+    # Voeg nieuwe voorraadbatch toe
+    # ========================================================
+
+    def add_batch(self, quantity, cost_per_unit):
+        new_batch = Batch(quantity, cost_per_unit)
+
+        self.batches.append(new_batch)
+
+        return f"{new_batch} added"
+
+
+    # ========================================================
+    # FULFILL DEMAND
+    # Probeer vraag te voldoen met beschikbare voorraad
+    # ========================================================
+
+    def fulfill_demand(self, demand):
+
+        # Blijf voorraad gebruiken zolang:
+        # - demand nog groter is dan 0
+        # - er nog batches bestaan
+        while demand > 0 and self.batches:
+
+            # Neem de LAATSTE batch
+            # batches[-1] -> LIFO-principe
+            current_batch = self.batches[-1]
+
+            # CASE 1:
+            # huidige batch bevat genoeg voorraad
+            if current_batch.quantity >= demand:
+
+                current_batch.quantity -= demand
+
+                # Batch volledig opgebruikt -> verwijderen
+                if current_batch.quantity == 0:
+                    self.batches.pop()
+
+                # Volledige demand kon voldaan worden
+                return 0
+
+            # CASE 2:
+            # huidige batch bevat onvoldoende voorraad
+            else:
+
+                # Trek beschikbare voorraad af van demand
+                demand -= current_batch.quantity
+
+                # Batch volledig opgebruikt -> verwijderen
+                self.batches.pop()
+
+        # Als demand overblijft, is er een stockout
+        return demand * self.stockout_penalty
+
+
+    # ========================================================
+    # CALCULATE HOLDING COST
+    # Bereken kost van resterende voorraad
+    # ========================================================
+
+    def calculate_holding_cost(self):
+        total_remaining_quantity = 0
+
+        for batch in self.batches:
+            total_remaining_quantity += batch.quantity
+
+        return total_remaining_quantity * self.holding_cost
+
+
+    # ========================================================
+    # STRING REPRESENTATION
+    # ========================================================
+
+    def __str__(self):
+        result = f"Product {self.product_name}:"
+
+        for batch in self.batches:
+            result += f"\n{batch}"
+
+        return result
+
+
+# ============================================================
+# 3. INVENTORY MANAGER
+# Beheert alle Product-objecten
+# ============================================================
+
+class InventoryManager:
+    def __init__(self):
+
+        # Dictionary:
+        #
+        # product_name -> Product-object
+        #
+        # Bijvoorbeeld:
+        # {
+        #     "Popcorn": Product(...),
+        #     "Chips": Product(...)
+        # }
+
+        self.products = {}
+
+
+    # ========================================================
+    # ADD PRODUCT
+    # ========================================================
+
+    def add_product(self, product_name, holding_cost, stockout_penalty):
+
+        # Product mag niet dubbel bestaan
+        if product_name in self.products:
+            return f"Product {product_name} already exists"
+
+        new_product = Product(
+            product_name,
+            holding_cost,
+            stockout_penalty
+        )
+
+        # Product-object bewaren onder product_name als key
+        self.products[product_name] = new_product
+
+        return new_product
+
+
+    # ========================================================
+    # RESTOCK PRODUCT
+    # Voeg nieuwe batch toe aan bestaand product
+    # ========================================================
+
+    def restock_product(self, product_name, quantity, cost_per_unit):
+
+        if product_name in self.products:
+
+            # Product-object ophalen uit dictionary
+            product = self.products[product_name]
+
+            # Batch toevoegen aan dat product
+            return product.add_batch(quantity, cost_per_unit)
+
+        return f"Product {product_name} not found"
+
+
+    # ========================================================
+    # SIMULATE DEMAND
+    # Maak willekeurige demand voor ieder product
+    # ========================================================
+
+    def simulate_demand(self, min_demand=0, max_demand=20):
+
+        demand = {}
+
+        for product_name in self.products:
+
+            random_demand = random.randint(
+                min_demand,
+                max_demand
+            )
+
+            # Bijvoorbeeld:
+            # demand["Popcorn"] = 32
+            demand[product_name] = random_demand
+
+        return demand
+
+
+    # ========================================================
+    # SIMULATE DAY
+    # Verwerk demand en bereken kosten
+    # ========================================================
+
+    def simulate_day(self, demand):
+
+        total_holding_cost = 0
+        total_stockout_cost = 0
+
+        for product_name in demand:
+
+            # Product-object ophalen
+            product = self.products[product_name]
+
+            # Demand voor dit product ophalen
+            product_demand = demand[product_name]
+
+
+            # --------------------------------------------
+            # DEMAND VERWERKEN
+            # --------------------------------------------
+
+            stockout_cost = product.fulfill_demand(
+                product_demand
+            )
+
+            total_stockout_cost += stockout_cost
+
+
+            # --------------------------------------------
+            # HOLDING COST VAN RESTERENDE VOORRAAD
+            # --------------------------------------------
+
+            holding_cost = product.calculate_holding_cost()
+
+            total_holding_cost += holding_cost
+
+
+        # Twee waarden tegelijk teruggeven
+        return total_holding_cost, total_stockout_cost
+
+
+    # ========================================================
+    # PRINT INVENTORY
+    # ========================================================
+
+    def print_inventory(self):
+
+        print("Current Inventory")
+
+        for product_name in self.products:
+
+            product = self.products[product_name]
+
+            print(product)
+
+
+# ============================================================
+# 4. TEST
+# ============================================================
+
+inventory = InventoryManager()
+
+
+# ------------------------------------------------------------
+# PRODUCTS TOEVOEGEN
+# ------------------------------------------------------------
+
+inventory.add_product(
+    "Popcorn",
+    holding_cost=5,
+    stockout_penalty=10
+)
+
+inventory.add_product(
+    "Chips",
+    holding_cost=10,
+    stockout_penalty=5
+)
+
+
+# ------------------------------------------------------------
+# BATCHES TOEVOEGEN
+# ------------------------------------------------------------
+
+inventory.restock_product("Popcorn", 250, 3.5)
+inventory.restock_product("Popcorn", 300, 5.6)
+
+inventory.restock_product("Chips", 100, 2.0)
+inventory.restock_product("Chips", 50, 2.5)
+
+
+# ------------------------------------------------------------
+# INVENTORY VOOR DEMAND
+# ------------------------------------------------------------
+
+print("VOOR:")
+
+inventory.print_inventory()
+
+
+# ------------------------------------------------------------
+# RANDOM DEMAND
+# ------------------------------------------------------------
+
+demand = inventory.simulate_demand(10, 50)
+
+print("Demand:", demand)
+
+
+# Bijvoorbeeld:
+#
+# {
+#     "Popcorn": 32,
+#     "Chips": 41
+# }
+
+
+# ------------------------------------------------------------
+# DAG SIMULEREN
+# ------------------------------------------------------------
+
+holding_cost, stockout_cost = inventory.simulate_day(demand)
+
+
+# ------------------------------------------------------------
+# INVENTORY NA DEMAND
+# ------------------------------------------------------------
+
+print("NA:")
+
+inventory.print_inventory()
+
+
+# ------------------------------------------------------------
+# RESULTATEN
+# ------------------------------------------------------------
+
+print("Holding cost:", holding_cost)
+print("Stockout cost:", stockout_cost)
