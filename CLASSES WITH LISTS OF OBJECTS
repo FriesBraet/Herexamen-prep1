@@ -1,0 +1,117 @@
+# ============================================================
+# CLASSES WITH LISTS OF OBJECTS
+# ============================================================
+
+
+# ============================================================
+# 1. STUDENT & CLASSROOM
+# ============================================================
+
+class Student:
+    def __init__(self, name, grade):
+        # Eigenschappen van één student
+        self.name = name
+        self.grade = grade
+
+
+class Classroom:
+    def __init__(self, name):
+        # Naam van de klas
+        self.name = name
+
+        # Lege lijst waarin Student-objecten worden bewaard
+        self.students = []
+
+
+# Student-objecten maken
+student1 = Student("Fries", 12)
+student2 = Student("Elias", 11)
+
+
+# Classroom-object maken
+classroom1 = Classroom("6LWI")
+
+
+# Student-objecten toevoegen aan de lijst van de classroom
+classroom1.students.append(student1)
+classroom1.students.append(student2)
+
+
+# Gegevens opvragen
+print(classroom1.name)
+
+print(classroom1.students[0].name)
+print(classroom1.students[0].grade)
+
+print(classroom1.students[1].name)
+print(classroom1.students[1].grade)
+
+
+# Structuur:
+#
+# classroom1
+# |
+# |-- name = "6LWI"
+# |
+# |-- students
+#       |
+#       |-- student1 -> name = "Fries", grade = 12
+#       |
+#       |-- student2 -> name = "Elias", grade = 11
+
+
+# ============================================================
+# 2. BOOK & LIBRARY
+# ============================================================
+
+class Book:
+    def __init__(self, title, pages):
+        # Eigenschappen van één boek
+        self.title = title
+        self.pages = pages
+
+
+class Library:
+    def __init__(self, name):
+        # Naam van de bibliotheek
+        self.name = name
+
+        # Lege lijst waarin Book-objecten worden bewaard
+        self.books = []
+
+
+# Book-objecten maken
+book1 = Book("1984", 328)
+book2 = Book("Dune", 412)
+
+
+# Library-object maken
+library1 = Library("Central")
+
+
+# Book-objecten toevoegen aan library
+library1.books.append(book1)
+library1.books.append(book2)
+
+
+# Gegevens opvragen
+print(library1.name)
+
+print(library1.books[0].title)
+print(library1.books[0].pages)
+
+print(library1.books[1].title)
+print(library1.books[1].pages)
+
+
+# Structuur:
+#
+# library1
+# |
+# |-- name = "Central"
+# |
+# |-- books
+#       |
+#       |-- book1 -> title = "1984", pages = 328
+#       |
+#       |-- book2 -> title = "Dune", pages = 412
