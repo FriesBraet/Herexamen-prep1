@@ -1,0 +1,133 @@
+# ============================================================
+# LIBRARY AS LINKED LIST
+# ADD - FIND - TOTAL PAGES
+# ============================================================
+
+
+class Book:
+    def __init__(self, title, pages):
+        # Data van één boek
+        self.title = title
+        self.pages = pages
+
+        # Verwijzing naar volgend Book-object
+        self.next = None
+
+    def __str__(self):
+        return f"{self.title} - {self.pages} pages"
+
+
+class Library:
+    def __init__(self, name):
+        self.name = name
+
+        # head verwijst naar eerste Book in de linked list
+        self.head = None
+
+
+    # ========================================================
+    # ADD BOOK
+    # Voeg bestaand Book-object achteraan toe
+    # ========================================================
+
+    def add_book(self, new_book_node):
+
+        # CASE 1: lege lijst
+        if self.head is None:
+            self.head = new_book_node
+
+        # CASE 2: lijst bevat al boeken
+        else:
+            current = self.head
+
+            # Zoek laatste boek
+            while current.next is not None:
+                current = current.next
+
+            # Voeg nieuw boek achteraan toe
+            current.next = new_book_node
+
+        return f"{new_book_node.title} added to {self.name} library."
+
+
+    # ========================================================
+    # FIND BOOK
+    # Zoek boek op titel
+    # ========================================================
+
+    def find_book(self, title):
+        current = self.head
+
+        while current is not None:
+
+            if current.title == title:
+                # Geef volledige Book-node terug
+                return current
+
+            # Ga naar volgende Book-node
+            current = current.next
+
+        # Boek niet gevonden
+        return None
+
+
+    # ========================================================
+    # TOTAL PAGES
+    # Tel pagina's van alle boeken op
+    # ========================================================
+
+    def total_pages(self):
+        current = self.head
+        total_pages = 0
+
+        while current is not None:
+
+            total_pages += current.pages
+
+            current = current.next
+
+        return total_pages
+
+
+# ============================================================
+# TEST
+# ============================================================
+
+my_book_list = Library("Central")
+
+
+book1 = Book("Dune", 412)
+print(my_book_list.add_book(book1))
+
+
+book2 = Book("Harry Potter", 801)
+print(my_book_list.add_book(book2))
+
+
+# Structuur:
+#
+# head
+#  |
+#  v
+# Dune -> Harry Potter -> None
+
+
+# ============================================================
+# FIND
+# ============================================================
+
+print(my_book_list.find_book("Dune"))
+# Dune - 412 pages
+
+
+print(my_book_list.find_book("1984"))
+# None
+
+
+# ============================================================
+# TOTAL PAGES
+# ============================================================
+
+print(my_book_list.total_pages())
+
+# 412 + 801 = 1213
