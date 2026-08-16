@@ -1,0 +1,366 @@
+# ============================================================
+# PYTHON BASICS - PRACTICE EXAMPLES
+# ============================================================
+
+
+# ============================================================
+# 1. LISTS
+# ============================================================
+
+my_list = ["f1", "f2", "f3"]
+
+# Element ophalen via index
+print(my_list[0])      # eerste element -> f1
+print(my_list[-1])     # laatste element -> f3
+
+
+# Element achteraan toevoegen
+my_list.append("f4")
+print(my_list[-1])     # f4
+
+
+# Element verwijderen op basis van waarde
+my_list.remove("f2")
+
+print(my_list[1])      # f3
+
+
+# Lengte van lijst
+length = len(my_list)
+print(length)
+
+
+# Controleren of element aanwezig is
+if "f4" in my_list:
+    print("Yipla")
+else:
+    print("Nooo")
+
+
+# ============================================================
+# 2. NESTED FOR-LOOPS
+# ============================================================
+
+mini_list = ["f1", "f2"]
+
+# Vergelijk ieder element uit my_list
+# met ieder element uit mini_list
+for element in my_list:
+    for mini_element in mini_list:
+
+        if element == mini_element:
+            print(
+                f"{element} uit my_list zit ook in mini_list"
+            )
+
+
+# ============================================================
+# 3. FOR-LOOP DOOR EEN LIST
+# ============================================================
+
+for element in my_list:
+    print(element)
+
+
+# ============================================================
+# 4. SOM BEREKENEN
+# ============================================================
+
+numbers = [1, 2, 3, 4, 5]
+
+total = 0
+
+for number in numbers:
+    total = total + number
+
+# Kan ook:
+# total += number
+
+print(total)
+
+
+# ============================================================
+# 5. EENVOUDIGE FUNCTION
+# ============================================================
+
+def greet(name):
+    # Twee manieren om hetzelfde te printen
+
+    print(f"Hallo {name}")
+    print("Hallo", name)
+
+
+greet("Fries")
+
+
+# ============================================================
+# 6. FUNCTION MET RETURN
+# ============================================================
+
+def double_number(number):
+    # Geeft het dubbele van number terug
+    return number * 2
+
+
+double_list = []
+total_doubles = 0
+
+print(double_list)
+print(total_doubles)
+
+
+# Doorloop alle getallen
+for number in numbers:
+
+    # Bereken dubbele
+    doubled_number = double_number(number)
+
+    # Voeg dubbele toe aan nieuwe lijst
+    double_list.append(doubled_number)
+
+    # Tel dubbele op bij totaal
+    total_doubles += doubled_number
+
+
+print(
+    f"De lijst van dubbels is {double_list} "
+    f"en hun totale som bedraagt {total_doubles}"
+)
+
+
+# ============================================================
+# 7. SQUARE FUNCTION
+# ============================================================
+
+def square(number):
+    # ** 2 betekent: tot de tweede macht
+    return number ** 2
+
+
+result = square(2)
+
+print(result)          # 4
+
+
+# ============================================================
+# 8. DICTIONARY
+# ============================================================
+
+my_dictionary = {
+    "f1": 1,
+    "f2": 2,
+    "f3": 3,
+}
+
+
+# Waarde ophalen via key
+print(my_dictionary["f2"])     # 2
+
+
+# Waarde aanpassen
+my_dictionary["f2"] = 5
+
+print(my_dictionary["f2"])     # 5
+
+
+# Controleren of KEY in dictionary zit
+if "f1" in my_dictionary:
+    print("Gotcha")
+
+
+# ============================================================
+# 9. EENVOUDIGE CLASS
+# ============================================================
+
+class Player:
+
+    def __init__(self, name, number):
+        # __init__ wordt uitgevoerd wanneer object wordt gemaakt
+
+        self.name = name
+        self.number = number
+
+
+p1 = Player("Hazard", 10)
+
+print(
+    f"His name is {p1.name} "
+    f"and he wears number {p1.number}"
+)
+
+
+# ============================================================
+# 10. CLASS MET METHODS
+# ============================================================
+
+class Car:
+
+    def __init__(self, brand, speed):
+        self.brand = brand
+        self.speed = speed
+
+    def get_speed(self):
+        # Geeft speed van dit object terug
+        return self.speed
+
+    def fast_or_not(self):
+
+        if self.speed > 190:
+            return "Fast"
+
+        else:
+            return "Slow"
+
+
+car1 = Car("BMW", 180)
+car2 = Car("Audi", 220)
+
+
+print(
+    f"Car 1 is a {car1.brand}, "
+    f"goes {car1.get_speed()} km/h "
+    f"and this is {car1.fast_or_not()}"
+)
+
+
+# ============================================================
+# 11. __str__ METHOD
+# ============================================================
+
+class Cyclist:
+
+    def __init__(self, name, team):
+        self.name = name
+        self.team = team
+
+    def __str__(self):
+        # Bepaalt hoe object geprint wordt
+        return f"{self.name} rides for {self.team}"
+
+
+c1 = Cyclist("Sagan", "Bora")
+c2 = Cyclist("MVDP", "Alpecin")
+c3 = Cyclist("WVA", "Visma")
+
+
+print(c1)
+print(c2)
+print(c3)
+
+
+# ============================================================
+# 12. STACK - LIFO
+# ============================================================
+
+# Stack = Last In, First Out
+# Het laatste element dat toegevoegd werd,
+# wordt als eerste verwijderd.
+
+plates = ["red", "blue", "green"]
+
+plates.pop()
+
+# "green" wordt verwijderd omdat dit
+# het laatste element van de lijst was
+
+print(plates)
+
+# resultaat:
+# ["red", "blue"]
+
+
+# ============================================================
+# 13. NODE
+# ============================================================
+
+class Node:
+
+    def __init__(self, value):
+
+        self.value = value
+
+        # Verwijzing naar volgende node
+        # Initieel bestaat die nog niet
+        self.next = None
+
+    def __str__(self):
+
+        # Laatste node heeft self.next = None.
+        # Daarom moeten we eerst controleren
+        # of er wel een volgende node bestaat.
+
+        if self.next is None:
+            return (
+                f"Node met waarde {self.value} "
+                f"heeft geen volgende node"
+            )
+
+        return (
+            f"Node met waarde {self.value} "
+            f"heeft als volgende node {self.next.value}"
+        )
+
+
+# ============================================================
+# 14. LINKED LIST
+# ============================================================
+
+class LinkedList:
+
+    def __init__(self):
+
+        # head verwijst naar eerste node
+        # Lege linked list -> head = None
+        self.head = None
+
+
+# Maak lege linked list
+linked_list = LinkedList()
+
+print(linked_list.head)      # None
+
+
+# Maak afzonderlijke nodes
+node1 = Node(10)
+node2 = Node(20)
+node3 = Node(30)
+
+
+# Eerste node wordt head
+linked_list.head = node1
+
+
+# Nodes met elkaar verbinden
+
+node1.next = node2
+node2.next = node3
+
+# Structuur:
+#
+# head
+#  |
+#  v
+# [10] -> [20] -> [30] -> None
+
+
+# ============================================================
+# 15. LINKED LIST DOORLOPEN
+# ============================================================
+
+current = linked_list.head
+
+# Start bij eerste node
+# en ga verder zolang current bestaat
+
+while current is not None:
+
+    print(current.value)
+
+    # Ga naar volgende node
+    current = current.next
+
+
+# Output:
+# 10
+# 20
+# 30
