@@ -1,0 +1,69 @@
+# ============================================================
+# STACK USING A PYTHON LIST
+# LIFO = Last In, First Out
+# ============================================================
+
+boxes = []
+
+box1 = "Box A"
+box2 = "Box B"
+box3 = "Box C"
+box4 = "Box D"
+
+
+# ============================================================
+# PUSH
+# append() voegt iets bovenaan/achteraan de stack toe
+# ============================================================
+
+boxes.append(box1)
+boxes.append(box2)
+boxes.append(box3)
+boxes.append(box4)
+
+print(boxes)
+
+# ['Box A', 'Box B', 'Box C', 'Box D']
+
+
+# ============================================================
+# POP
+# pop() zonder index verwijdert het LAATSTE element
+# ============================================================
+
+remove1 = boxes.pop()
+remove2 = boxes.pop()
+
+
+print(remove1)
+# Box D
+
+print(remove2)
+# Box C
+
+print(boxes)
+# ['Box A', 'Box B']
+
+
+# ============================================================
+# STACK STRUCTUUR
+# ============================================================
+
+# Eerst toegevoegd:
+# Box A
+#
+# Daarna:
+# Box B
+# Box C
+# Box D
+#
+# Bovenkant stack:
+#
+# Box D   <- wordt eerst verwijderd
+# Box C
+# Box B
+# Box A
+#
+# Daarom:
+# Last In = Box D
+# First Out = Box D
