@@ -1,0 +1,87 @@
+# DICTIONARY - STUDENT SCORES
+# Een dictionary bewaart gegevens als:
+# key -> value
+#
+# Hier:
+# naam van student -> score
+#
+# Voorbeeld:
+# {
+#     "Fries": 14,
+#     "Elias": 8
+# }
+
+
+class StudentScores:
+    def __init__(self):
+        # Elke StudentScores start met een lege dictionary.
+        self.scores = {}
+
+    def add_score(self, name, score):
+        # Voeg een nieuwe key-value combinatie toe.
+        #
+        # name = key
+        # score = value
+        #
+        # Bijvoorbeeld:
+        # self.scores["Fries"] = 14
+        self.scores[name] = score
+
+    def get_score(self, name):
+        # Controleer eerst of de naam als key bestaat.
+        if name in self.scores:
+
+            # Haal de value op die bij deze key hoort.
+            return self.scores[name]
+
+        # Als de student niet bestaat:
+        return None
+
+    def passed_students(self):
+        # Hierin verzamelen we alle studenten die geslaagd zijn.
+        passed_students_list = []
+
+        # Bij een for-loop over een dictionary krijg je standaard de KEYS.
+        # Hier zijn dat dus de namen van de studenten.
+        for name in self.scores:
+
+            # Haal de score van de huidige student op.
+            # self.scores[name] geeft de value bij de key 'name'.
+            if self.scores[name] >= 10:
+
+                # Voeg enkel de naam toe aan de resultaatlijst.
+                passed_students_list.append(name)
+
+        # Geef uiteindelijk de volledige lijst terug.
+        return passed_students_list
+
+
+# --------------------------------------------------
+# TESTCODE
+# --------------------------------------------------
+
+scores = StudentScores()
+
+# Voeg studenten en hun scores toe.
+scores.add_score("Fries", 14)
+scores.add_score("Elias", 8)
+scores.add_score("Jente", 12)
+
+# Dictionary ziet er nu ongeveer zo uit:
+# {
+#     "Fries": 14,
+#     "Elias": 8,
+#     "Jente": 12
+# }
+
+
+print(scores.get_score("Fries"))
+# 14
+
+print(scores.get_score("Cedric"))
+# None
+# Cedric bestaat niet als key in de dictionary.
+
+print(scores.passed_students())
+# ['Fries', 'Jente']
+# Alleen studenten met score >= 10 worden toegevoegd.
