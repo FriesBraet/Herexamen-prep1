@@ -1,0 +1,149 @@
+# ============================================================
+# FILES - WRITE, READ, APPEND + SIMPLE CSV
+# ============================================================
+
+
+# ============================================================
+# 1. WRITE TO FILE
+# "w" = write
+# Maakt bestand aan of overschrijft bestaand bestand
+# ============================================================
+
+with open("Students List.txt", "w") as file:
+    file.write("Fries\n")
+    file.write("Elias\n")
+
+# \n = nieuwe lijn
+
+
+# ============================================================
+# 2. READ ENTIRE FILE
+# read() leest volledige bestand in één keer
+# ============================================================
+
+with open("Students List.txt", "r") as file:
+    content = file.read()
+
+print(content)
+
+# Output:
+# Fries
+# Elias
+
+
+# ============================================================
+# 3. READ ONE LINE AT A TIME
+# readline() leest telkens één lijn
+# ============================================================
+
+with open("Students List.txt", "r") as file:
+    line1 = file.readline()
+    line2 = file.readline()
+
+print(line1.strip())
+print(line2.strip())
+
+# strip() verwijdert o.a. de \n op het einde
+
+
+# ============================================================
+# 4. READ ALL LINES AS A LIST
+# readlines() geeft een list terug
+# ============================================================
+
+with open("Students List.txt", "r") as file:
+    lines = file.readlines()
+
+print(lines)
+
+# Bijvoorbeeld:
+# ['Fries\n', 'Elias\n']
+
+
+# ============================================================
+# 5. APPEND TO FILE
+# "a" = append
+# Voegt toe zonder bestaande inhoud te verwijderen
+# ============================================================
+
+with open("Students List.txt", "a") as file:
+    file.write("Cedric\n")
+
+
+# Bestand bevat nu:
+#
+# Fries
+# Elias
+# Cedric
+
+
+# ============================================================
+# 6. LOOP THROUGH FILE
+# Vaak de handigste manier
+# ============================================================
+
+with open("Students List.txt", "r") as file:
+
+    for line in file:
+        print(line.strip())
+
+# Elke ronde van de for-loop:
+# line = één regel uit het bestand
+
+
+# ============================================================
+# 7. SIMPLE CSV READING
+# ============================================================
+
+# Voorbeeld Student.csv:
+#
+# Fries,21,15
+# Elias,22,17
+# Cedric,20,13
+
+
+with open("Student.csv", "r") as file:
+
+    for line in file:
+
+        # Verwijder \n en splits regel op komma's
+        parts = line.strip().split(",")
+
+        # parts is bijvoorbeeld:
+        # ["Fries", "21", "15"]
+
+        name = parts[0]
+        age = parts[1]
+        score = parts[2]
+
+        print(name, age, score)
+
+
+# ============================================================
+# 8. CSV - TYPES CONVERTEREN
+# ============================================================
+
+# Alles wat uit een gewoon tekstbestand komt,
+# wordt initieel gelezen als STRING.
+
+with open("Student.csv", "r") as file:
+
+    for line in file:
+        parts = line.strip().split(",")
+
+        name = parts[0]          # str
+        age = int(parts[1])      # str -> int
+        score = int(parts[2])    # str -> int
+
+        print(name, age, score)
+
+
+# Dit is belangrijk als je wilt rekenen:
+
+# FOUT / ongewenst:
+# age = "21"
+# age + 1
+
+# GOED:
+# age = int("21")
+# age + 1
