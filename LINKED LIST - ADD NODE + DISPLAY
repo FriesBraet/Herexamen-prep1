@@ -1,0 +1,83 @@
+# ============================================================
+# LINKED LIST - ADD NODE + DISPLAY
+# ============================================================
+
+
+class Node:
+    def __init__(self, value):
+        # Waarde die deze node bewaart
+        self.value = value
+
+        # Verwijzing naar volgende node
+        # Nieuwe node wijst initieel naar niets
+        self.next = None
+
+
+class LinkedList:
+    def __init__(self):
+        # head wijst naar de eerste node
+        # Lege linked list -> head = None
+        self.head = None
+
+
+    def add_node(self, value):
+        # Maak een nieuwe node
+        new_node = Node(value)
+
+        # CASE 1:
+        # De linked list is nog leeg
+        if self.head is None:
+            self.head = new_node
+
+        # CASE 2:
+        # Er staan al nodes in de linked list
+        else:
+            current = self.head
+
+            # Ga door tot aan de laatste node
+            # De laatste node herken je doordat:
+            # current.next == None
+            while current.next is not None:
+                current = current.next
+
+            # Laat laatste node wijzen naar nieuwe node
+            current.next = new_node
+
+
+    def display(self):
+        # Begin bij eerste node
+        current = self.head
+
+        # Doorloop volledige linked list
+        while current is not None:
+
+            print(current.value)
+
+            # Ga naar volgende node
+            current = current.next
+
+
+# ============================================================
+# TEST
+# ============================================================
+
+my_list = LinkedList()
+
+my_list.add_node(12)
+my_list.add_node(5)
+my_list.add_node(8)
+
+my_list.display()
+
+
+# Structuur:
+#
+# head
+#  |
+#  v
+# [12] -> [5] -> [8] -> None
+#
+# Output:
+# 12
+# 5
+# 8
