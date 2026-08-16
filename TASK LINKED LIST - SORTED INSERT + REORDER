@@ -1,0 +1,270 @@
+# ============================================================
+# TASK LINKED LIST
+# SORTED INSERT + REORDER
+# ============================================================
+
+
+class TaskNode:
+    def __init__(self, task_name, duration, priority):
+        self.task_name = task_name
+        self.duration = duration
+        self.priority = priority
+        self.next = None
+
+    def __str__(self):
+        return (
+            f"{self.task_name} - "
+            f"{self.duration} min - "
+            f"Priority {self.priority}"
+        )
+
+
+class TaskList:
+    def __init__(self):
+        # Eerste node van de linked list
+        self.head = None
+
+
+    # ========================================================
+    # ADD TASK
+    # Voeg nieuwe task gewoon achteraan toe
+    # ========================================================
+
+    def add_task(self, task_name, duration, priority):
+        new_task = TaskNode(task_name, duration, priority)
+
+        # CASE 1: lege lijst
+        if self.head is None:
+            self.head = new_task
+
+        # CASE 2: lijst bevat al tasks
+        else:
+            current = self.head
+
+            # Zoek laatste node
+            while current.next is not None:
+                current = current.next
+
+            # Voeg nieuwe node achteraan toe
+            current.next = new_task
+
+        return new_task
+
+
+    # ========================================================
+    # DISPLAY
+    # Toon alle tasks
+    # ========================================================
+
+    def display(self):
+        current = self.head
+
+        while current is not None:
+            print(current)
+            current = current.next
+
+
+    # ========================================================
+    # SORTED INSERT BY PRIORITY
+    #
+    # Voeg BESTAANDE node in op juiste plaats.
+    # Lagere priority-waarde komt eerst.
+    #
+    # Priority 1 -> Priority 2 -> Priority 3
+    # ========================================================
+
+    def sorted_insert_by_priority(self, new_node):
+
+        # CASE 1:
+        # lijst is leeg
+        #
+        # OF
+        #
+        # nieuwe node moet voor huidige head komen
+        if (
+            self.head is None
+            or new_node.priority < self.head.priority
+        ):
+            new_node.next = self.head
+            self.head = new_node
+
+        # CASE 2:
+        # zoek juiste plaats ergens na de head
+        else:
+            current = self.head
+
+            # Blijf doorgaan zolang de VOLGENDE node
+            # een lagere priority heeft dan de nieuwe node
+            while (
+                current.next is not None
+                and current.next.priority < new_node.priority
+            ):
+                current = current.next
+
+            # Nieuwe node invoegen tussen:
+            #
+            # current -> new_node -> oude current.next
+
+            new_node.next = current.next
+            current.next = new_node
+
+        return new_node
+
+
+    # ========================================================
+    # REORDER TASKS BY PRIORITY
+    #
+    # Maak nieuwe gesorteerde linked list.
+    # Iedere oude node wordt één voor één correct ingevoegd.
+    # ========================================================
+
+    def reorder_tasks_by_priority(self):
+
+        # Nieuwe lege linked list
+        new_list = TaskList()
+
+        # Start bij eerste node oude lijst
+        current = self.head
+
+        while current is not None:
+
+            # BELANGRIJK:
+            # onthoud eerst de volgende node
+            # voordat we current losmaken
+            next_node = current.next
+
+            # Maak current los uit oude ketting
+            current.next = None
+
+            # Voeg current gesorteerd toe aan nieuwe lijst
+            new_list.sorted_insert_by_priority(current)
+
+            # Ga naar volgende oorspronkelijke node
+            current = next_node
+
+        # Vervang oude head door head van gesorteerde lijst
+        self.head = new_list.head
+
+
+    # ========================================================
+    # SORTED INSERT BY PRIORITY + DURATION
+    #
+    # Eerst sorteren op priority.
+    # Bij gelijke priority sorteren op duration.
+    #
+    # Lagere priority eerst.
+    # Bij gelijke priority: kortere duration eerst.
+    # ========================================================
+
+    def sorted_insert_by_priority_duration(self, new_node):
+
+        # CASE 1:
+        # lijst leeg
+        #
+        # OF nieuwe node heeft lagere priority
+        #
+        # OF zelfde priority maar kortere duration
+        if (
+            self.head is None
+            or new_node.priority < self.head.priority
+            or (
+                new_node.priority == self.head.priority
+                and new_node.duration < self.head.duration
+            )
+        ):
+            new_node.next = self.head
+            self.head = new_node
+
+        # CASE 2:
+        # juiste plaats verder in lijst zoeken
+        else:
+            current = self.head
+
+            while (
+                current.next is not None
+                and (
+                    # Volgende task heeft hogere prioriteit
+                    # (= lager priority-getal)
+                    current.next.priority < new_node.priority
+
+                    or
+
+                    # Zelfde priority:
+                    # kortere duration moet ervoor blijven
+                    (
+                        current.next.priority == new_node.priority
+                        and current.next.duration < new_node.duration
+                    )
+                )
+            ):
+                current = current.next
+
+            # Node invoegen
+            new_node.next = current.next
+            current.next = new_node
+
+        return new_node
+
+
+    # ========================================================
+    # REORDER BY PRIORITY + DURATION
+    # ========================================================
+
+    def reorder_tasks_by_priority_duration(self):
+
+        new_list = TaskList()
+        current = self.head
+
+        while current is not None:
+
+            # Bewaar volgende node
+            next_node = current.next
+
+            # Maak huidige node los
+            current.next = None
+
+            # Voeg gesorteerd toe aan nieuwe lijst
+            new_list.sorted_insert_by_priority_duration(current)
+
+            # Ga verder door oorspronkelijke lijst
+            current = next_node
+
+        # Nieuwe gesorteerde lijst wordt onze echte lijst
+        self.head = new_list.head
+
+
+# ============================================================
+# TEST
+# ============================================================
+
+my_list = TaskList()
+
+my_list.add_task("Cleaning", 45, 2)
+my_list.add_task("Assembly", 30, 1)
+my_list.add_task("Painting", 25, 1)
+my_list.add_task("Packaging", 20, 3)
+
+
+print("BEFORE SORT")
+my_list.display()
+
+# Mogelijke structuur:
+#
+# Cleaning   P2 45
+# Assembly   P1 30
+# Painting   P1 25
+# Packaging  P3 20
+
+
+print("\nSORT BY PRIORITY + DURATION")
+
+my_list.reorder_tasks_by_priority_duration()
+
+my_list.display()
+
+# Resultaat:
+#
+# Painting   - 25 min - Priority 1
+# Assembly   - 30 min - Priority 1
+# Cleaning   - 45 min - Priority 2
+# Packaging  - 20 min - Priority 3
