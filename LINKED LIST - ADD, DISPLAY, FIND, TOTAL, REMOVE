@@ -1,0 +1,194 @@
+# ============================================================
+# LINKED LIST - ADD, DISPLAY, FIND, TOTAL, REMOVE
+# ============================================================
+
+
+class Node:
+    def __init__(self, value):
+        # Waarde van de node
+        self.value = value
+
+        # Verwijzing naar volgende node
+        self.next = None
+
+
+class LinkedList:
+    def __init__(self):
+        # head verwijst naar de eerste node
+        # Lege linked list -> head = None
+        self.head = None
+
+
+    # ========================================================
+    # ADD
+    # Voeg nieuwe node toe achteraan
+    # ========================================================
+
+    def add(self, value):
+        new_node = Node(value)
+
+        # CASE 1: lijst is leeg
+        if self.head is None:
+            self.head = new_node
+
+        # CASE 2: lijst bevat al nodes
+        else:
+            current = self.head
+
+            # Zoek de laatste node
+            while current.next is not None:
+                current = current.next
+
+            # Hang nieuwe node achteraan
+            current.next = new_node
+
+
+    # ========================================================
+    # DISPLAY
+    # Toon alle waarden
+    # ========================================================
+
+    def display(self):
+        current = self.head
+
+        # Doorloop volledige linked list
+        while current is not None:
+            print(current.value)
+            current = current.next
+
+
+    # ========================================================
+    # FIND
+    # Zoek een bepaalde waarde
+    # ========================================================
+
+    def find(self, value):
+        current = self.head
+
+        while current is not None:
+
+            # Waarde gevonden
+            if current.value == value:
+                return True
+
+            # Ga naar volgende node
+            current = current.next
+
+        # Hele lijst doorlopen zonder resultaat
+        return False
+
+
+    # ========================================================
+    # TOTAL
+    # Bereken som van alle waarden
+    # ========================================================
+
+    def total(self):
+        total = 0
+        current = self.head
+
+        while current is not None:
+
+            # Tel huidige waarde op
+            total += current.value
+
+            # Ga naar volgende node
+            current = current.next
+
+        return total
+
+
+    # ========================================================
+    # REMOVE
+    # Verwijder eerste node met bepaalde waarde
+    # ========================================================
+
+    def remove(self, value):
+        current = self.head
+
+        # previous houdt de vorige node bij
+        # Bij de eerste node bestaat nog geen vorige node
+        previous = None
+
+        while current is not None:
+
+            # Gezochte node gevonden
+            if current.value == value:
+
+                # CASE 1:
+                # current is de eerste node
+                if previous is None:
+                    self.head = current.next
+
+                # CASE 2:
+                # current staat ergens na de head
+                else:
+                    previous.next = current.next
+
+                # Stop zodra node verwijderd is
+                return
+
+            # Schuif previous en current één plaats verder
+            previous = current
+            current = current.next
+
+
+# ============================================================
+# TEST
+# ============================================================
+
+my_list = LinkedList()
+
+my_list.add(10)
+my_list.add(20)
+my_list.add(30)
+
+# Structuur:
+#
+# head
+#  |
+#  v
+# [10] -> [20] -> [30] -> None
+
+
+# Toon lijst
+my_list.display()
+
+# Output:
+# 10
+# 20
+# 30
+
+
+# Zoek waarde
+print(my_list.find(10))
+# True
+
+
+print(my_list.find(50))
+# False
+
+
+# Bereken totaal
+print(my_list.total())
+# 10 + 20 + 30 = 60
+
+
+# Verwijder 20
+my_list.remove(20)
+
+
+# Nieuwe structuur:
+#
+# head
+#  |
+#  v
+# [10] -> [30] -> None
+
+
+# Controle
+my_list.display()
+
+# Output:
+# 10
+# 30
