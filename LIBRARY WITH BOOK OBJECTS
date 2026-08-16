@@ -1,0 +1,142 @@
+# ============================================================
+# LIBRARY WITH BOOK OBJECTS
+# ADD - FIND - TOTAL PAGES - DISPLAY
+# ============================================================
+
+
+class Book:
+    def __init__(self, title, pages):
+        # Eigenschappen van één boek
+        self.title = title
+        self.pages = pages
+
+    def __str__(self):
+        # Bepaalt hoe een Book-object geprint wordt
+        return f"{self.title} - {self.pages} pages"
+
+
+class Library:
+    def __init__(self, name):
+        # Naam van de bibliotheek
+        self.name = name
+
+        # Lijst waarin Book-objecten worden bewaard
+        self.book_list = []
+
+
+    # ========================================================
+    # ADD BOOK
+    # Voeg een Book-object toe aan de library
+    # ========================================================
+
+    def add_book(self, book):
+        self.book_list.append(book)
+
+
+    # ========================================================
+    # FIND BOOK
+    # Zoek een boek op basis van titel
+    # ========================================================
+
+    def find_book(self, title):
+
+        for book in self.book_list:
+
+            if book.title == title:
+                # Geef volledige Book-object terug
+                return book
+
+        # Boek niet gevonden
+        return None
+
+
+    # ========================================================
+    # TOTAL PAGES
+    # Tel het aantal pagina's van alle boeken op
+    # ========================================================
+
+    def total_pages(self):
+        total = 0
+
+        for book in self.book_list:
+            total += book.pages
+
+        return total
+
+
+    # ========================================================
+    # DISPLAY LIBRARY
+    # Toon naam + alle boeken
+    # ========================================================
+
+    def display_library(self):
+        print(f"Library: {self.name}")
+
+        # Een lege list wordt gezien als False
+        if not self.book_list:
+            print("Library is empty")
+            return
+
+        # Anders: toon alle boeken
+        for book in self.book_list:
+            print(book)
+
+
+# ============================================================
+# TEST
+# ============================================================
+
+library = Library("Central")
+
+
+# Lege library tonen
+library.display_library()
+
+# Output:
+# Library: Central
+# Library is empty
+
+
+# Book-objecten maken
+book1 = Book("Atomic Habits", 212)
+book2 = Book("Behave", 518)
+
+
+# Boeken toevoegen
+library.add_book(book1)
+library.add_book(book2)
+
+
+# ============================================================
+# FIND
+# ============================================================
+
+print(library.find_book("Atomic Habits"))
+# Atomic Habits - 212 pages
+
+print(library.find_book("Atomic Habits123"))
+# None
+
+print(library.find_book("Behave"))
+# Behave - 518 pages
+
+
+# ============================================================
+# TOTAL PAGES
+# ============================================================
+
+print(library.total_pages())
+
+# 212 + 518 = 730
+
+
+# ============================================================
+# DISPLAY
+# ============================================================
+
+library.display_library()
+
+# Output:
+# Library: Central
+# Atomic Habits - 212 pages
+# Behave - 518 pages
